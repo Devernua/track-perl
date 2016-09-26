@@ -1,1 +1,1 @@
-perl -lnae 'print(join (";", splice(@F, 0, 8), join(" ",@F))) if $. > 1'
+perl -lne 'print (join(";", split(" ", $_, 9))) if $. > 1'
