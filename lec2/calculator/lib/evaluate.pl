@@ -19,10 +19,26 @@ no warnings 'experimental';
 
 sub evaluate {
 	my $rpn = shift;
+	my @stack;
+	eval{
+		for (@$rpn) {
+			if (/\d+/) 			{ push(@stack, $_) }
+			elsif (s/U([-+])/${1}1/) 	{ push(@stack, pop(@stack) * $_)}
+			else {
+				my $one = pop(@stack);
+				my $two = pop(@stack);
+				given ($_){
+					when (m{^[+]$}) {push(@stack, $two +  $one)}
+					when (m{^[-]$}) {push(@stack, $two -  $one)}
+					when (m{^[*]$}) {push(@stack, $two *  $one)}
+					when (m{^[/]$}) {push(@stack, $two /  $one)}
+					when (m{^\^$} ) {push(@stack, $two ** $one)}	
+				}
+			}
+		}
+	1} or die "NOOoo";
 
-	# ...
-
-	return 0;
+	return pop(@stack);
 }
 
 1;
