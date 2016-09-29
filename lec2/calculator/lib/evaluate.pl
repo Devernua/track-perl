@@ -23,7 +23,8 @@ sub evaluate {
 	eval{
 		for (@$rpn) {
 			if (/\d+/) 			{ push(@stack, $_) }
-			elsif (s/U([-+])/${1}1/) 	{ push(@stack, pop(@stack) * $_)}
+			elsif (/U[-]/) 			{ push(@stack, -pop(@stack))}
+			elsif (/U[+]/) 			{  }
 			else {
 				my $one = pop(@stack);
 				my $two = pop(@stack);
