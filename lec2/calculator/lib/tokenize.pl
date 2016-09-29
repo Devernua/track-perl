@@ -27,10 +27,24 @@ no warnings 'experimental';
 
 sub tokenize {
 	chomp(my $expr = shift);
-	my @res;
+	
+	#check input data
+	die "incorrect char" 	if ($expr =~ m{[^+\d\s().*e/^-]});
+	die "digit space digit" if ($expr =~ m{([\de.]\s+[\de.])});
+	die "bad op" 		if ($expr =~ m{[-+*/^]\s*[*/^)]|[(+-]\s*[*/^]});
+	
+	$expr =~ s/\s//g; 					#delete spaces
+	$expr =~ s/(?<![)e\d.])([-+])/U$1/g;			#insert U-+
 
-	# ...
+	die "bad dot" 	if($expr =~ m{\.\D|\.\d?\.\d});
+	die "bad op" 	if ($expr =~ m{[Ue]?[-+*/^][^U\d.(]|^[-+*/^)]|[-+*/^(]$|[Ue]{2,}});
 
+	my @res = 	map /\d+/ ? 0 + $_ : $_, 		#convert bad digit to well digit
+			grep length ,				#only non empty
+			split m{(U[+-]|(?<!e)[-+]|[*()/^])}, 	#tokenize digit and op 
+			$expr;
+	
+	return @res if wantarray;
 	return \@res;
 }
 
