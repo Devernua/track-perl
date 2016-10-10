@@ -5,6 +5,8 @@ use warnings;
 
 use Local::MusicLibrary::Reader;
 use Local::MusicLibrary::Writer;
+use Local::MusicLibrary::Filters;
+
 =encoding utf8
 
 =head1 NAME
@@ -40,11 +42,13 @@ sub PushSong {
 }
 
 sub Write {
-	my @result = @SONGS;
-	#filter
-	#sort
-	#columns
-	Local::MusicLibrary::Writer::PrintSongs(@result);
+	Local::MusicLibrary::Writer::PrintSongs(
+		Local::MusicLibrary::Filters::Select
+		Local::MusicLibrary::Filters::Sort
+		Local::MusicLibrary::Filters::Filter
+		@SONGS
+	);		
+
 }
 
 

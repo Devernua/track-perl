@@ -3,6 +3,8 @@ package Local::MusicLibrary::Writer;
 use strict;
 use warnings;
 
+use List::Util qw(max sum);
+
 =encoding utf8
 
 =head1 NAME
@@ -24,12 +26,14 @@ our $VERSION = '1.00';
 sub PrintSongs
 {
 	unless(@_) {return 0;}
-	my @lens = ();
-	foreach ( split(",", $Local::MusicLibrary::CFG{"columns"}) ) {
-		push @lens, 0;
-		
+	my @lens = (0) x scalar @{$_[0]};
+	foreach(@_) 
+	{
+		@lens = map {max(length $_, shift @lens)} @$_;
 	}
-	print "@lens, Hello\n";###
+	print "/" . "-" x ((scalar(@lens) - 1) * 3 + sum(@lens) + 2) . "\\\n"; #head
+
+	print "\\" . "-" x ((scalar(@lens) - 1) * 3 + sum(@lens) + 2) . "/\n"; #footer
 
 
 }
