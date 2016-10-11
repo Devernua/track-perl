@@ -43,11 +43,11 @@ sub PushSong {
 	push @SONGS, Local::MusicLibrary::Reader::GetSong($_);
 }
 
-sub Write {
+sub WriteLikeTask {
 	Local::MusicLibrary::Writer::PrintSongs(
 		Local::MusicLibrary::Filters::Select
-		Local::MusicLibrary::Filters::Sort
 		Local::MusicLibrary::Filters::Filter
+		Local::MusicLibrary::Filters::Sort
 		@SONGS
 	);		
 
