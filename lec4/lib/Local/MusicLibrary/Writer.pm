@@ -25,13 +25,13 @@ our $VERSION = '1.00';
 
 sub PrintSongs
 {
-	unless(@_) {return 0;}
+    unless(@_) {return 0;}
 	
     my @lens = (0) x scalar @{$_[0]};
-	foreach(@_) 
-	{
-		@lens = map max(length $_, shift @lens), @$_;
-	}
+    foreach(@_) 
+    {
+        @lens = map max(length $_, shift @lens), @$_;
+    }
 
     my @raws = map {
         my $result = "";
@@ -44,7 +44,7 @@ sub PrintSongs
 
     my $delimiter = "|" . join ("+", map("-" x ($_ + 2) , @lens)) . "|\n"; 
     
-	print "/" . "-" x ((scalar(@lens) - 1) * 3 + sum(@lens) + 2) . "\\\n";  #head
+    print "/" . "-" x ((scalar(@lens) - 1) * 3 + sum(@lens) + 2) . "\\\n";  #head
     print join $delimiter, @raws;                                           #content
     print "\\" . "-" x ((scalar(@lens) - 1) * 3 + sum(@lens) + 2) . "/\n";  #footer
 }
