@@ -27,13 +27,13 @@ our $VERSION = '1.00';
 
 our %CFG = (
         "filters" => {
-	        "band" 		=> "",
-	        "year" 		=> 0,
-	        "album" 	=> "",
-	        "track" 	=> "",
-	        "format" 	=> ""
+	        "band" 		=> undef,
+	        "year" 		=> undef,
+	        "album" 	=> undef,
+	        "track" 	=> undef,
+	        "format" 	=> undef
             },
-	    "sort" 		=> "",
+	    "sort" 		=> undef,
 	    "columns" 	=> "band,year,album,track,format"
 );
 

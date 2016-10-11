@@ -2,7 +2,6 @@ package Local::MusicLibrary::Filters;
 
 use strict;
 use warnings;
-
 =encoding utf8
 
 =head1 NAME
@@ -35,14 +34,32 @@ sub Select
 		@_ ;
 }
 
+
 sub Sort 
 {
-	return @_;
+    my $param = $Local::MusicLibrary::CFG{"sort"};
+    unless( defined $param ) { return @_}
+    return sort {($param eq "year")? $a->{$param} <=> $b->{$param} : $a->{$param} cmp $b->{$param} } @_;
+}
+
+sub _filter
+{
+    my %curr = %$_;
+    my %filters = %{$Local::MusicLibrary::CFG{"filters"}};
+    my $result = 1;
+    foreach (grep defined $filters{$_}, keys %filters)
+    {
+        unless( (/year/) ? $curr{$_} == $filters{$_} : $curr{$_} eq $filters{$_} )
+        {    
+            $result = 0;
+        }
+    }
+    return $result;
 }
 
 sub Filter 
 {
-	return @_;
+    return grep _filter($_), @_;
 }
 
 42;
