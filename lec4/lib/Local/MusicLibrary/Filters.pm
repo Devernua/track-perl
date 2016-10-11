@@ -2,6 +2,7 @@ package Local::MusicLibrary::Filters;
 
 use strict;
 use warnings;
+use List::Util qw(reduce);
 =encoding utf8
 
 =head1 NAME
@@ -42,24 +43,15 @@ sub Sort
     return sort {($param eq "year")? $a->{$param} <=> $b->{$param} : $a->{$param} cmp $b->{$param} } @_;
 }
 
-sub _filter
-{
-    my %curr = %$_;
-    my %filters = %{$Local::MusicLibrary::CFG{"filters"}};
-    my $result = 1;
-    foreach (grep defined $filters{$_}, keys %filters)
-    {
-        unless( (/year/) ? $curr{$_} == $filters{$_} : $curr{$_} eq $filters{$_} )
-        {    
-            $result = 0;
-        }
-    }
-    return $result;
-}
 
 sub Filter 
 {
-    return grep _filter($_), @_;
+    my %filters = %{$Local::MusicLibrary::CFG{"filters"}};
+    return grep {
+            not reduce {
+                $a += ($b =~ /year/)? $_->{$b} != $filters{$b} : $_->{$b} ne $filters{$b};
+            } (0, grep defined $filters{$_}, keys %filters)
+        } @_;
 }
 
 42;
