@@ -26,13 +26,15 @@ our $VERSION = '1.00';
 =cut
 
 our %CFG = (
-	"band" 		=> "",
-	"year" 		=> 0,
-	"album" 	=> "",
-	"track" 	=> "",
-	"format" 	=> "",
-	"sort" 		=> "",
-	"columns" 	=> "band,year,album,track,format"
+        "filters" => {
+	        "band" 		=> "",
+	        "year" 		=> 0,
+	        "album" 	=> "",
+	        "track" 	=> "",
+	        "format" 	=> ""
+            },
+	    "sort" 		=> "",
+	    "columns" 	=> "band,year,album,track,format"
 );
 
 our @SONGS = ();

@@ -26,13 +26,13 @@ our $VERSION = '1.00';
 sub GetOpt
 {
 	GetOptions(
-        "band:s"    => \$Local::MusicLibrary::CFG{band},
-        "year:i"    => \$Local::MusicLibrary::CFG{year},
-        "album:s"   => \$Local::MusicLibrary::CFG{album},
-        "track:s"   => \$Local::MusicLibrary::CFG{track},
-        "format:s"  => \$Local::MusicLibrary::CFG{format},
-        "sort:s"    => \$Local::MusicLibrary::CFG{sort},
-        "columns:s" => \$Local::MusicLibrary::CFG{columns}
+        "band:s"    => \$Local::MusicLibrary::CFG{"filters"}{"band"},
+        "year:i"    => \$Local::MusicLibrary::CFG{"filters"}{"year"},
+        "album:s"   => \$Local::MusicLibrary::CFG{"filters"}{"album"},
+        "track:s"   => \$Local::MusicLibrary::CFG{"filters"}{"track"},
+        "format:s"  => \$Local::MusicLibrary::CFG{"filters"}{"format"},
+        "sort:s"    => \$Local::MusicLibrary::CFG{"sort"},
+        "columns:s" => \$Local::MusicLibrary::CFG{"columns"}
     );
 }
 
