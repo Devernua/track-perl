@@ -3,7 +3,7 @@ package Local::MusicLibrary::Writer;
 use strict;
 use warnings;
 
-use List::Util qw(max sum);
+use List::Util qw(max sum reduce);
 
 =encoding utf8
 
@@ -28,25 +28,15 @@ sub PrintSongs
     unless(@_) {return 0;}
 	
     my @lens = (0) x scalar @{$_[0]};
-    foreach(@_) 
-    {
-        @lens = map max(length $_, shift @lens), @$_;
-    }
+    @lens = map(max(length $_, shift @lens), @$_) for (@_);
 
     my @raws = map {
-        my $result = "";
-        for (my $i = 0; $i <= $#lens; $i++)
-        {
-            $result .= "| " . " " x ($lens[$i]-length($_->[$i])) . $_->[$i] . " ";
-        }
-        $result .= "|\n";
+        (reduce { $a .= "| " . " " x ($lens[$b] - length($_->[$b])) . $_->[$b] . " " } "", 0..$#lens ) . "|\n";
     } @_;
-
-    my $delimiter = "|" . join ("+", map("-" x ($_ + 2) , @lens)) . "|\n"; 
     
-    print "/" . "-" x ((scalar(@lens) - 1) * 3 + sum(@lens) + 2) . "\\\n";  #head
-    print join $delimiter, @raws;                                           #content
-    print "\\" . "-" x ((scalar(@lens) - 1) * 3 + sum(@lens) + 2) . "/\n";  #footer
+    print "/" . "-" x ((scalar(@lens) - 1) * 3 + sum(@lens) + 2) . "\\\n";      #head
+    print join "|" . join ("+", map("-" x ($_ + 2) , @lens)) . "|\n", @raws;    #content
+    print "\\" . "-" x ((scalar(@lens) - 1) * 3 + sum(@lens) + 2) . "/\n";      #footer
 }
 
 1;
