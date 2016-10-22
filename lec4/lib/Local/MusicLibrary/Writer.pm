@@ -31,7 +31,7 @@ sub PrintSongs
     @lens = map(max(length $_, shift @lens), @$_) for (@_);
 
     my @raws = map {
-        (reduce { $a .= "| " . " " x ($lens[$b] - length($_->[$b])) . $_->[$b] . " " } "", 0..$#lens ) . "|\n";
+        (reduce { $a .= sprintf("| %$lens[$b]s ", $_->[$b])} "", 0..$#lens ) . "|\n";
     } @_;
     
     print "/" . "-" x ((scalar(@lens) - 1) * 3 + sum(@lens) + 2) . "\\\n";      #head
