@@ -30,7 +30,7 @@ sub new {
 
 sub get { 
     my ($self, $name, $default) = @_;
-    return 0 + ($self->{'data'}->{$name} || $default);
+    return $self->{'data'}->{$name} || $default;
 }
 
 1;
