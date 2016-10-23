@@ -34,7 +34,7 @@ sub _reduce
 {
     my ($self, $row) = @_;
     my $obj_row = $self->{'row_class'}->new('str' => $row);
-    my $diff = $obj_row->get($self->{'top'}) - $obj_row->get($self->{'bot'});
+    my $diff = $obj_row->get($self->{'top'}, 0) - $obj_row->get($self->{'bot'}, 0);
     return ($diff > $self->reduced) ? $diff : $self->reduced; 
 }
 
