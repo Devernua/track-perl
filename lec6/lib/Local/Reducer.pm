@@ -26,7 +26,7 @@ sub new {
     my $self = bless { } => $class;
     $self->{'source'}       = $params{'source'};
     $self->{'row_class'}    = $params{'row_class'};
-    $self->{'value'}        = $params{'initial_value'};
+    $self->{'value'}        = $params{'initial_value'} || 0;
     return $self;
 }
 
