@@ -1,4 +1,4 @@
-package Local::Row;
+package Local::Source;
 
 use strict;
 use warnings;
@@ -7,7 +7,7 @@ use warnings;
 
 =head1 NAME
 
-Local::Row - base abstract reducer
+Local::Source - base abstract source
 
 =head1 VERSION
 
@@ -24,13 +24,12 @@ our $VERSION = '1.00';
 sub new {
     my ($class, %params) = @_;
     my $self = bless { } => $class;
-    $self->{'str'} = $params{'str'};
     return $self;
 }
 
-sub get { 
-    my ($self, $name, $default) = @_;
-    return 0 + ($self->{'data'}->{$name} || $default);
+sub next {
+    my ($self) = @_;
+    shift @{$self->{'iterator'}};
 }
 
 1;

@@ -1,4 +1,4 @@
-package Local::Reducer::Sum;
+package Local::Reducer::MaxDiff;
 use parent 'Local::Reducer';
 
 use strict;
@@ -25,15 +25,17 @@ our $VERSION = '1.00';
 sub new {
     my ($class, %params) = @_;
     my $self = $class->SUPER::new(%params);
-    $self->{'field'} = $params{'field'};
+    $self->{'top'} = $params{'top'};
+    $self->{'bot'} = $params{'bottom'};
     return $self;
 }
 
 sub _reduce
-{  
+{
     my ($self, $row) = @_;
     my $obj_row = $self->{'row_class'}->new('str' => $row);
-    return $self->{'value'} + $obj_row->get($self->{'field'}, 0);
+    my $diff = $obj_row->get($self->{'top'}) - $obj_row->get($self->{'bot'});
+    return ($diff > $self->reduced) ? $diff : $self->reduced; 
 }
 
 1;

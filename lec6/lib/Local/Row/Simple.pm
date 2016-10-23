@@ -1,5 +1,5 @@
-package Local::Reducer::Sum;
-use parent 'Local::Reducer';
+package Local::Row::Simple;
+use parent 'Local::Row';
 
 use strict;
 use warnings;
@@ -25,15 +25,13 @@ our $VERSION = '1.00';
 sub new {
     my ($class, %params) = @_;
     my $self = $class->SUPER::new(%params);
-    $self->{'field'} = $params{'field'};
+    $self->{'data'} = {
+        split ':', 
+        split ',', 
+        $self->{'str'}    
+    };
     return $self;
 }
 
-sub _reduce
-{  
-    my ($self, $row) = @_;
-    my $obj_row = $self->{'row_class'}->new('str' => $row);
-    return $self->{'value'} + $obj_row->get($self->{'field'}, 0);
-}
 
 1;

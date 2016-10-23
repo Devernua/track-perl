@@ -1,8 +1,10 @@
-package Local::Reducer::Sum;
-use parent 'Local::Reducer';
+package Local::Row::JSON;
+use parent 'Local::Row';
 
 use strict;
 use warnings;
+
+use JSON::XS ();
 
 =encoding utf8
 
@@ -25,15 +27,9 @@ our $VERSION = '1.00';
 sub new {
     my ($class, %params) = @_;
     my $self = $class->SUPER::new(%params);
-    $self->{'field'} = $params{'field'};
+    $self->{'data'} = JSON::XS->new->utf8->decode($self->{'str'});
     return $self;
 }
 
-sub _reduce
-{  
-    my ($self, $row) = @_;
-    my $obj_row = $self->{'row_class'}->new('str' => $row);
-    return $self->{'value'} + $obj_row->get($self->{'field'}, 0);
-}
 
 1;

@@ -37,12 +37,19 @@ sub reduced {
 
 sub reduce_all {
     my ($self) = @_;
-    die "error call reduce_all";
+    while (defined (my $row = $self->{'source'}->next)) {
+        $self->{'value'} = $self->_reduce($row);
+    }
+    return $self->reduced();
 }
 
 sub reduce_n {
     my ($self, $n) = @_;
-    die "error call reduce_n";
+    while($n > 0 && defined (my $row = $self->{'source'}->next)) {
+        $self->{'value'} = $self->_reduce($row);
+        $n--;
+    }
+    return $self->reduced();
 }
 
 1;

@@ -1,5 +1,5 @@
-package Local::Reducer::Sum;
-use parent 'Local::Reducer';
+package Local::Source::FileHandler;
+use parent 'Local::Source';
 
 use strict;
 use warnings;
@@ -25,15 +25,8 @@ our $VERSION = '1.00';
 sub new {
     my ($class, %params) = @_;
     my $self = $class->SUPER::new(%params);
-    $self->{'field'} = $params{'field'};
+    $self->{'iterator'} = [<$params{'fh'}>];
     return $self;
-}
-
-sub _reduce
-{  
-    my ($self, $row) = @_;
-    my $obj_row = $self->{'row_class'}->new('str' => $row);
-    return $self->{'value'} + $obj_row->get($self->{'field'}, 0);
 }
 
 1;
