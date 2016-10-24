@@ -25,8 +25,13 @@ our $VERSION = '1.00';
 sub new {
     my ($class, %params) = @_;
     my $self = $class->SUPER::new(%params);
-    $self->{'iterator'} = [<$params{'fh'}>];
+    $self->{'iterator'} = <$params{'fh'}>;
     return $self;
+}
+
+sub next {
+	my ($self) = @_;
+	return scalar( $self->{'iterator'} );
 }
 
 1;
