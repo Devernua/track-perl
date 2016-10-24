@@ -26,7 +26,7 @@ sub new {
     my ($class, %params) = @_;
     my $self = $class->SUPER::new(%params);
     $self->{'data'} = {
-	map { split ':' } 
+	map { split (':', $_, 2) } 
         split ',', 
         $self->{'str'}    
     };
