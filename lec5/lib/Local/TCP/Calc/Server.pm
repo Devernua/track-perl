@@ -23,12 +23,13 @@ sub start_server {
 	$max_worker         = $opts{max_worker} // die "max_worker required"; 
 	$max_forks_per_task = $opts{max_forks_per_task} // die "max_forks_per_task required";
 	my $max_receiver    = $opts{max_receiver} // die "max_receiver required"; 
-	...
+	
 	# Инициализируем сервер my $server = IO::Socket::INET->new(...);
-	# Инициализируем очередь my $q = Local::TCP::Calc::Server::Queue->new(...);
-  	...
+	# Инициализируем очередь 
+	my $q = Local::TCP::Calc::Server::Queue->new();
+  	
 	$q->init();
-	...
+	
 	# Начинаем accept-тить подключения
 	# Проверяем, что количество принимающих форков не вышло за пределы допустимого ($max_receiver)
 	# Если все нормально отвечаем клиенту TYPE_CONN_OK() в противном случае TYPE_CONN_ERR()
