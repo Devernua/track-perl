@@ -66,14 +66,14 @@ sub start_server {
 			my $struct 			= Local::TCP::Calc->read_message($client, $len);
 			
 			if ($type == Local::TCP::Calc::TYPE_START_WORK()) {
-				my $id 		= $q->add($struct->{"list"});
-				my $pmsg 	= Local::TCP::Calc->pack_message({"id" => $id});
+				my $id 		= $q->add($struct);
+				my $pmsg 	= Local::TCP::Calc->pack_message([$id]);
 				my $phead 	= Local::TCP::Calc->pack_header($type, length($pmsg), 1);
 				print $client $phead;
 				print $client $pmsg;
 			}
 			elsif ($type == Local::TCP::Calc::TYPE_CHECK_WORK()) {
-				my ($status, $body) = $q->get_status($struct->{"id"});
+				my ($status, $body) = $q->get_status($struct);
 				my $pmsg 	= Local::TCP::Calc->pack_message($body);
 				my $phead 	= Local::TCP::Calc->pack_header($status, length($pmsg), 1);
 				print $client $phead;

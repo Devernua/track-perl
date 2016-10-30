@@ -3,7 +3,7 @@ package Local::TCP::Calc;
 our $VERSION = 1.0;
 
 use strict;
-use JSON::XS ();
+use CBOR::XS;
 
 sub TYPE_START_WORK 	{1}
 sub TYPE_CHECK_WORK 	{2}
@@ -35,14 +35,14 @@ sub pack_message {
 	my $pkg 	= shift;
 	my $msg 	= shift;
 	
-	return JSON::XS::encode_json($msg);
+	return CBOR::XS::encode_cbor($msg);
 }
 
 sub unpack_message {
 	my $pkg 	= shift;
 	my $msg 	= shift;
 	
-	return JSON::XS::decode_json($msg);
+	return CBOR::XS::decode_cbor($msg);
 }
 
 sub my_read {

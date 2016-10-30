@@ -19,7 +19,7 @@ sub set_connect {
 
 sub do_request {
 	my ($pkg, $server, $type, $message) = @_;
-	my $pmsg  = Local::TCP::Calc->pack_message({"list" => $message});
+	my $pmsg  = Local::TCP::Calc->pack_message($message);
 	my $phead = Local::TCP::Calc->pack_header($type, length($pmsg), 1);
 	
 	print $server $phead;
@@ -35,7 +35,7 @@ sub do_request {
 	
 	close $server;
 	
-	if ($type == Local::TCP::Calc::TYPE_START_WORK()) { return $struct->{'id'}; } 
+	if ($type == Local::TCP::Calc::TYPE_START_WORK()) { return; } 
 #	given ($ptype) {
 #		when(Local::TCP::Calc::STATUS_NEW) {print "helo"; }
 #		when(Local::TCP::Calc::STATUS_WORK) { }
