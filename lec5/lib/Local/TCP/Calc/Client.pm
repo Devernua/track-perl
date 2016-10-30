@@ -44,7 +44,7 @@ sub do_request {
 	close $server;
 	
 	if ($type == Local::TCP::Calc::TYPE_START_WORK()) { 
-		return struct; 
+		return $struct; 
 	} 
 	given($ptype) {
 		when(Local::TCP::Calc::STATUS_NEW()  ) { return []}

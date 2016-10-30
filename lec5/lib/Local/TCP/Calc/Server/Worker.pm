@@ -59,7 +59,7 @@ sub start {
 	my $self = shift;
 	my $task = shift;
 	my @tasks = @$task;
-	my ($div, $mod) = scalar(@tasks) / $self->max_forks, scalar(@tasks) % $self->max_forks;
+	my ($div, $mod) = (scalar(@tasks) / $self->max_forks, scalar(@tasks) % $self->max_forks);
 	for my $i (0..$self->max_forks) {
 		my $len = $div + (($i < $mod) ? 1 : 0);
 		next unless $len;

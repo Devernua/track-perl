@@ -5,6 +5,7 @@ our $VERSION = 1.0;
 use strict;
 use warnings;
 use diagnostics;
+use IO::Select;
 use CBOR::XS;
 
 sub TYPE_START_WORK 	{1}
@@ -50,13 +51,15 @@ sub unpack_message {
 sub my_read {
 	my ($pkg, $sock, $len) = @_;
 	my ($resp, $l, $buf) = ("", $len);
+	my $sel = IO::Select->new($sock);
+	unless ($sel->can_read(2)) {return "";}
 	do {
 		sysread($sock, $buf, $l);
 		$resp .= $buf;
 		$l -= length($buf);
 	} while (length($buf) > 0);
 	
-	if (length ($resp) != $len) { die "Unexpected connection closing" };
+	if (length ($resp) != $len) { die "Unexpected closing " . length($resp) . " != " . $len };
 	return $resp;
 }
 
