@@ -2,3 +2,4 @@ bin.my
 MYMETA*
 *blib*
 Makefile
+.DS_Store

@@ -12,7 +12,7 @@ has max_task       => (is => 'rw', isa => 'Int', default => 0);
 
 sub init {
 	my $self = shift;
-	...
+	
 	# Подготавливаем очередь к первому использованию если это необходимо
 }
 
@@ -36,6 +36,19 @@ sub to_done {
 	my $file_name = shift;
 	...
 	# Переводим задание в статус DONE, сохраняем имя файла с резуьтатом работы
+}
+
+sub to_work {
+	my $self = shift;
+	my $task_id = shift;
+	...
+}
+
+sub to_error {
+	my $self = shift;
+	my $task_id = shift;
+	my $error = shift;
+	...
 }
 
 sub get_status {

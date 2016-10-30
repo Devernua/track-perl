@@ -21,7 +21,7 @@ sub pack_header {
 	my $size 	= shift;
 	my $version 	= shift || 1;
 
-	return pack('VVV', $version, $size, $type);
+	return pack('VVV', $type, $size, $version);
 }
 
 sub unpack_header {
@@ -34,12 +34,14 @@ sub unpack_header {
 sub pack_message {
 	my $pkg 	= shift;
 	my $msg 	= shift;
+	
 	return JSON::XS::encode_json($msg);
 }
 
 sub unpack_message {
 	my $pkg 	= shift;
 	my $msg 	= shift;
+	
 	return JSON::XS::decode_json($msg);
 }
 
@@ -56,4 +58,21 @@ sub my_read {
 	return $resp;
 }
 
+sub send_ok {
+	my ($pkg, $sock) = @_;
+	print $pkg->pack_header(TYPE_CONN_OK(), 0, 1);
+}
+
+sub send_err {
+	my ($pkg, $sock) = @_;
+	print $pkg->pack_header(TYPE_CONN_ERR(), 0, 1);
+}
+
+sub read_header {
+	my ($pkg, )
+}
+
+sub read_message {
+	my ($pkg, )
+}
 1;
