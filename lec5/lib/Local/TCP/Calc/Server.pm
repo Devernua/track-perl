@@ -1,7 +1,11 @@
 package Local::TCP::Calc::Server;
 
 use strict;
+use warnings;
+use diagnostics;
 use POSIX qw( WNOHANG WIFEXITED );
+use IO::Compress::Gzip qw(gzip $GzipError) ;
+
 use IO::Socket;
 use Local::TCP::Calc;
 use Local::TCP::Calc::Server::Queue;
@@ -74,6 +78,10 @@ sub start_server {
 			}
 			elsif ($type == Local::TCP::Calc::TYPE_CHECK_WORK()) {
 				my ($status, $body) = $q->get_status($struct);
+				if ($status == Local::TCP::Calc::STATUS_DONE()) {
+					my $file = $body; $body = [];
+					gzip $file => $body;
+				}
 				my $pmsg 	= Local::TCP::Calc->pack_message($body);
 				my $phead 	= Local::TCP::Calc->pack_header($status, length($pmsg), 1);
 				print $client $phead;

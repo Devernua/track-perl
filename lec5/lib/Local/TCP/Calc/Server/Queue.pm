@@ -2,6 +2,7 @@ package Local::TCP::Calc::Server::Queue;
 
 use strict;
 use warnings;
+use diagnostics;
 
 use Mouse;
 use Local::TCP::Calc;

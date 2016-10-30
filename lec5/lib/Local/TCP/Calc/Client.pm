@@ -1,9 +1,21 @@
 package Local::TCP::Calc::Client;
 
+use 5.010;
 use strict;
+use warnings;
+use diagnostics;
 use IO::Socket;
 use IO::Select;
+use IO::Uncompress::Unzip qw(unzip $UnzipError) ;
 use Local::TCP::Calc;
+
+BEGIN{
+	if ($] < 5.018) {
+		package experimental;
+		use warnings::register;
+	}
+}
+no warnings 'experimental';
 
 sub set_connect {
 	my $pkg = shift;
@@ -12,6 +24,7 @@ sub set_connect {
 	my $server = IO::Socket::INET->new(
 		$ip . ":" . $port
 	); #or die "Cant connect to server";
+	my ($type) = Local::TCP::Calc->read_header($server);
 	# read header before read message
 	# check on Local::TCP::Calc::TYPE_CONN_ERR();
 	return $server;
@@ -24,27 +37,27 @@ sub do_request {
 	
 	print $server $phead;
 	print $server $pmsg;
-	my $struct;
-	my $ptype;
-	if (IO::Select->new($server)->can_read(2)) {
-		$phead = Local::TCP::Calc->my_read($server, 12);
-		($ptype, my $len) = Local::TCP::Calc->unpack_header($phead);	
-		$pmsg = Local::TCP::Calc->my_read($server, $len);
-		$struct = Local::TCP->unpack_message($pmsg);
-	}
+
+	my ($ptype, $len) 	= Local::TCP::Calc->read_header($server);
+	my $struct 			= Local::TCP::Calc->read_message($server, $len);
 	
 	close $server;
 	
-	if ($type == Local::TCP::Calc::TYPE_START_WORK()) { return; } 
-#	given ($ptype) {
-#		when(Local::TCP::Calc::STATUS_NEW) {print "helo"; }
-#		when(Local::TCP::Calc::STATUS_WORK) { }
-#		when(Local::TCP::Calc::STATUS_DONE) { print "jelo";
-#			$struct = $struct->{'file'};
-#		}
-#		when($_ == Local::TCP::Calc::STATUS_ERROR) { print "eelo";}
-#		default { print "print "}
-#	}
+	if ($type == Local::TCP::Calc::TYPE_START_WORK()) { 
+		return struct; 
+	} 
+	given($ptype) {
+		when(Local::TCP::Calc::STATUS_NEW()  ) { return []}
+		when(Local::TCP::Calc::STATUS_WORK() ) { return []}
+		when(Local::TCP::Calc::STATUS_DONE() ) { 
+			my ($status, $buf);
+			($buf, $struct) = ($struct, []); 
+			$status = unzip $buf => $struct
+       		 	or die "unzip failed: $UnzipError\n";
+		}
+		when($_ == Local::TCP::Calc::STATUS_ERROR()) { return [];}
+		default { print "print "}
+	}
 
 	return $struct;
 }

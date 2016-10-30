@@ -3,6 +3,8 @@ package Local::TCP::Calc;
 our $VERSION = 1.0;
 
 use strict;
+use warnings;
+use diagnostics;
 use CBOR::XS;
 
 sub TYPE_START_WORK 	{1}
@@ -19,7 +21,7 @@ sub pack_header {
 	my $pkg 	= shift;
 	my $type 	= shift;
 	my $size 	= shift;
-	my $version 	= shift || 1;
+	my $version = shift || 1;
 
 	return pack('VVV', $type, $size, $version);
 }
@@ -69,10 +71,12 @@ sub send_err {
 }
 
 sub read_header {
-	my ($pkg, )
+	my ($pkg, $sock) = @_;
+	return $pkg->unpack_header($pkg->my_read($sock, 12));
 }
 
 sub read_message {
-	my ($pkg, )
+	my ($pkg, $sock, $len) = @_;
+	return $pkg->unpack_message($pkg->my_read($sock, $len));
 }
 1;

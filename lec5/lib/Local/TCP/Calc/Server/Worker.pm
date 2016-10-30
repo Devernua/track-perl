@@ -2,6 +2,7 @@ package Local::TCP::Calc::Server::Worker;
 
 use strict;
 use warnings;
+use diagnostics;
 use Mouse;
 use Fcntl ':flock';
 use POSIX qw( WNOHANG WIFEXITED );
