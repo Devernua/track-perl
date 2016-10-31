@@ -5,7 +5,6 @@ use strict;
 use warnings;
 use diagnostics;
 use IO::Socket;
-use IO::Select;
 use IO::Uncompress::Unzip qw(unzip $UnzipError) ;
 use Local::TCP::Calc;
 
