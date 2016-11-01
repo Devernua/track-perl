@@ -115,7 +115,7 @@ sub check_queue_workers {
 
 		my $worker = Local::TCP::Calc::Server::Worker->new(
 			cur_task_id => $id,
-			calc_ref => sub { shift; return eval($_); }, #special for test
+			calc_ref => sub { return eval($_[0]); }, #special for test
 			max_forks => $max_forks_per_task,
 		);
 

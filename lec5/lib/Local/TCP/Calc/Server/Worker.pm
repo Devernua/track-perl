@@ -68,6 +68,7 @@ sub start {
 		my $child = fork();
 		if ($child) { 
 			$self->forks->{"$i"} = $child;
+            $SIG{CHLD} = \$self->child_fork();
 		}
 		if (defined $child) {
 			for (@per_task) {

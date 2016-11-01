@@ -25,10 +25,11 @@ sub open {
 	my $lock = shift;
 	my $lock_type = shift;
 
-	open($self->f_handle, $open_type, $self->queue_filename);
+	open(my $f, $open_type, $self->queue_filename);
 	if ($lock) {
-		flock($self->f_handle, $lock_type) or die "Cant flock file $self->cur_task_id";
+		flock($f, $lock_type) or die "Cant flock file $self->cur_task_id";
 	}
+    $self->f_handle($f);
 	# Открваем файл с очередью, не забываем про локи, возвращаем содержимое (перловая структура)
 }
 
