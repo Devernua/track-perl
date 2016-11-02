@@ -25,7 +25,7 @@ sub open {
 	my $lock = shift;
 	my $lock_type = shift;
 
-	open(my $f, $open_type, $self->queue_filename);
+	open(my $f, $open_type, $self->queue_filename) or die "WA $! TA FAAAAA!!!";
 	if ($lock) {
 		flock($f, $lock_type) or die "Cant flock file $self->cur_task_id";
 	}
@@ -46,7 +46,7 @@ sub to_done {
 	my $id = shift;
 	my $file_name = shift;
 	my @que = ();
-	$self->open('<', 1, LOCK_EX);
+	$self->open('+<', 1, LOCK_EX);
 	my $fields = $self->read();
 	unless (defined $fields) {$self->close(); return 0;}
 	while (defined $fields) {
@@ -60,7 +60,6 @@ sub to_done {
 		$fields = $self->read();
 	}
 
-	$self->open('>', 0);
 	for (@que) {
 		write($_);
 	}
@@ -72,7 +71,7 @@ sub to_work {
 	my $self = shift;
 	my $id = shift;
 	my @que = ();
-	$self->open('<', 1, LOCK_EX);
+	$self->open('+<', 1, LOCK_EX);
 	my $fields = $self->read();
 	unless (defined $fields) {$self->close(); return 0;}
 	while (defined $fields) {
@@ -86,7 +85,6 @@ sub to_work {
 		$fields = $self->read();
 	}
 
-	$self->open('>', 0);
 	for (@que) {
 		write($_);
 	}
@@ -99,7 +97,7 @@ sub to_error {
 	my $file_name = shift;
 	#my $error = shift;
 	my @que = ();
-	$self->open('<', 1, LOCK_EX);
+	$self->open('+<', 1, LOCK_EX);
 	my $fields = $self->read();
 	unless (defined $fields) {$self->close(); return 0;}
 	while (defined $fields) {
@@ -113,7 +111,6 @@ sub to_error {
 		$fields = $self->read();
 	}
 
-	$self->open('>', 0);
 	for (@que) {
 		write($_);
 	}
@@ -146,9 +143,8 @@ sub delete {
 	my $self = shift;
 	my $id = shift;
 	my $status = shift;
-	$self->open('<', 1, LOCK_EX);
+	$self->open('+<', 1, LOCK_EX);
 	#read
-	$self->open('>', 0);
 	$self->close();
 	# Удаляем задание из очереди в соответствующем статусе
 }
