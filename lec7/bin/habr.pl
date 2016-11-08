@@ -14,15 +14,16 @@ use Local::Habr;
 
 my $ua = LWP::UserAgent->new();
 
-my $res = $ua->get("https://habrahabr.ru/users/kricha");
+my $res = $ua->get("https://geektimes.ru/users/marks");
 
-#if ($res->is_success()) {
-#	my $parser = Local::Habr::Parser->new();
-#	my $result = $parser->get_user($res->content);
-#	print Dumper($result);
-#}
-#$res = $ua->get("https://geektimes.ru/post/282378/");
-$res = $ua->get("https://habrahabr.ru/post/314540");
+if ($res->is_success()) {
+	my $parser = Local::Habr::Parser->new();
+	my $result = $parser->get_user($res->content);
+	print Dumper($result);
+}
+$res = $ua->get("https://geektimes.ru/post/282378/");
+#$res = $ua->get("https://habrahabr.ru/post/314540");
+#$res = $ua->get("https://habrahabr.ru/post/314344");
 
 if ($res->is_success()) {
     my $parser = Local::Habr::Parser->new();

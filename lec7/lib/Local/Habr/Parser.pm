@@ -34,7 +34,7 @@ sub new {
 sub get_post {
     my ($self, $content) = @_;
     my %data;
-#my $parser = HTML::TagParser->new($content);
+    
     my $parser = HTML::TreeBuilder::XPath->new_from_content($content);
     $data{author} = substr( 
             (
@@ -44,12 +44,8 @@ sub get_post {
             1
     );
     $data{title} = ($parser->findvalues('//h1[ @class = "post__title"]/span'))[-1];
-#$data{author} = substr( ($parser->findvalues('//a[ @class = "author-info__nickname"]'))[0], 1);
-#$data{author} = $parser->getElementsByClassName("post-type__value")->innerText;
-#$data{author} = substr $parser->getElementsByClassName("post-type__value_author")->innerText, 1;
-
-#$data{title} = $parser->getElementsByClassName("post__title");
-#$data{title} = [split("\n", $parser->getElementsByClassName("post__title")->innerText)]->[1] =~ s/^\s+//r;
+    $data{views} = $parser->findvalue('//div[ @class = "views-count_post"]');
+    $data{stars} = $parser->findvalue('//span[ @class = "favorite-wjt__counter js-favs_count"]');
     return \%data;
 }
 
@@ -57,42 +53,11 @@ sub get_user {
 	my ($self, $content) = @_;
 	my %data;
 	
-	my $parser = HTML::TokeParser->new(\$content);
-	
-	while (my $token = $parser->get_token()) {
-		if (
-			$token->[0] eq 'S' && 
-			$token->[1] eq 'a' && 
-			defined ($token->[2]->{class}) && 
-			$token->[2]->{class} =~ /^\s*author\-info__nickname.*/i
-		) 
-		{
-			$data{nickname} =  substr $parser->get_token()->[1], 1;	
-		}
-		if (
-			$token->[0] eq 'S' &&
-			$token->[1] eq 'div' &&
-			defined ($token->[2]->{class}) &&
-			$token->[2]->{class} =~ /^\s*voting\-wjt__counter\-score.*/i
-		)
-		{
-			$data{karma} = $parser->get_token()->[1] =~ s/,/./r;
-		}
-		if ( 
-			$token->[0] eq 'S' &&
-			$token->[1] eq 'div' &&
-			defined ($token->[2]->{class}) &&
-			$token->[2]->{class} =~ /^.*statistic_user\-rating.*/i
-		)
-		{
-			$parser->get_token();
-			$parser->get_token();
-			$data{rating} = $parser->get_token()->[1] =~ s/,/./r;
-		}
-	}
-	
-	return \%data;
-	
+    my $parser = HTML::TreeBuilder::XPath->new_from_content($content);
+    $data{nickname} = $parser->findvalue('//a[ @class = "author-info__nickname"]');
+    $data{karma} = $parser->findvalue('//div[ @class = "voting-wjt__counter-score js-karma_num"]');
+    $data{rating} = $parser->findvalue('//div[ @class = "statistic__value statistic__value_magenta"]');
+    return \%data;
 }
 
 1;
