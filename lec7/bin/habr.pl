@@ -21,7 +21,7 @@ if ($res->is_success()) {
 	my $result = $parser->get_user($res->content);
 	print Dumper($result);
 }
-$res = $ua->get("https://geektimes.ru/post/282378/");
+$res = $ua->get("https://geektimes.ru/post/145527/");
 #$res = $ua->get("https://habrahabr.ru/post/314540");
 #$res = $ua->get("https://habrahabr.ru/post/314344");
 

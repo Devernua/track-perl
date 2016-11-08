@@ -46,6 +46,7 @@ sub get_post {
     $data{title} = ($parser->findvalues('//h1[ @class = "post__title"]/span'))[-1];
     $data{views} = $parser->findvalue('//div[ @class = "views-count_post"]');
     $data{stars} = $parser->findvalue('//span[ @class = "favorite-wjt__counter js-favs_count"]');
+    $data{commentors} = [$parser->findvalues('//a[ @class = "comment-item__username"]')];
     return \%data;
 }
 
