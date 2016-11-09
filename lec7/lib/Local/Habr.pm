@@ -21,4 +21,16 @@ our $VERSION = '1.00';
 
 =cut
 
+our %CFG = (
+	"site" 		=> "habrahabr.ru",
+	"format" 	=> "ddp",
+	"refresh" 	=> undef,
+	"command"	=> undef,
+	"comhash" 	=> {
+			"id" 	=> undef,
+			"name" 	=> undef,
+			"post" 	=> undef,
+			"n"	 	=> undef,
+	},	
+);
 1;
