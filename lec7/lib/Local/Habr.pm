@@ -3,6 +3,8 @@ package Local::Habr;
 use strict;
 use warnings;
 use Local::Habr::Parser;
+use Local::Habr::Schema;
+
 =encoding utf8
 
 =head1 NAME
@@ -33,4 +35,5 @@ our %CFG = (
 			"n"	 	=> undef,
 	},	
 );
+
 1;
