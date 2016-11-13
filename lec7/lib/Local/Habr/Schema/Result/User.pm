@@ -5,6 +5,7 @@ __PACKAGE__->table('user');
 __PACKAGE__->add_columns(
 	user_id => {
 		data_type => 'integer',
+		is_auto_increment => 1,
 	},
 	nickname => {
 		data_type => 'varchar',

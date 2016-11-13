@@ -5,7 +5,7 @@ use warnings;
 
 use FindBin;
 use lib "$FindBin::Bin/../lib";
-use LWP::UserAgent;
+
 use Data::Dumper;
 use utf8;
 use Local::Habr;
@@ -25,12 +25,28 @@ GetOptions(
 	"id:i{1,}"	=> \@{$Local::Habr::CFG{"comhash"}{"id"}},
 );
 
-
-my $schema = Local::Habr::Schema->connect("dbi:SQLite:dbname=test.db", "", "");
+#my $schema = Local::Habr::Schema->connect("dbi:SQLite:dbname=test.db", "", "");
 #$schema->deploy; #for new db
 
-print "Opened database successfully\n";
-#my $rs = $schema->resultset('Artist');
+if($ARGV[0] eq "user") {
+	if (defined $Local::Habr::CFG{"comhash"}{"name"}) {
+		Local::Habr::GetUserByName($Local::Habr::CFG{"comhash"}{"name"});
+	} else {
+		Local::Habr::GetUserByPost($Local::Habr::CFG{"comhash"}{"post"});
+	}
+} elsif($ARGV[0] eq "post") {
+	Local::Habr::GetPost($Local::Habr::CFG{"comhash"}{"id"});
+} elsif($ARGV[0] eq "commenters") {
+	Local::Habr::GetCommenters($Local::Habr::CFG{"comhash"}{"post"});
+} elsif($ARGV[0] eq "self_commentors") {
+	Local::Habr::GetSelfCommenters();
+} elsif($ARGV[0] eq "desert_posts") {
+	Local::Habr::GetDesertPosts($Local::Habr::CFG{"comhash"}{"n"});
+}
+
+
+#print "Opened database successfully\n";
+
 
 #my $new_user = $schema->resultset('User')->new({ nickname => 'Alex', user_id=>2, karma=>0, rating=>3 });
 #$new_user->insert; # Auto-increment primary key filled in after INSERT
@@ -74,10 +90,10 @@ print "Opened database successfully\n";
 #	$new_post->insert;
 #}#
 
-for ($schema->resultset('Post')->all)
-{
-	print $_->author->nickname . " " . $_->title . " \n";
-}
+#for ($schema->resultset('Post')->all)
+#{
+#	print $_->author->nickname . " " . $_->title . " \n";
+#}
 #
 #my $ua = LWP::UserAgent->new();
 #
