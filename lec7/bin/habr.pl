@@ -27,13 +27,13 @@ GetOptions(
 
 
 my $schema = Local::Habr::Schema->connect("dbi:SQLite:dbname=test.db", "", "");
-#$schema->deploy or 1; #for new db
+#$schema->deploy; #for new db
 
 print "Opened database successfully\n";
-my $rs = $schema->resultset('Artist');
+#my $rs = $schema->resultset('Artist');
 
-#my $new_artist = $schema->resultset('Artist')->new({ name => 'Titto', artistid=>2 });
-#$new_artist->insert; # Auto-increment primary key filled in after INSERT
+#my $new_user = $schema->resultset('User')->new({ nickname => 'Alex', user_id=>2, karma=>0, rating=>3 });
+#$new_user->insert; # Auto-increment primary key filled in after INSERT
 
 
 #my $new_cd = $schema->resultset('CD')->new({ title => 'Spoon' });
@@ -41,16 +41,16 @@ my $rs = $schema->resultset('Artist');
 #$new_cd->insert; # Auto-increment primary key filled in after INSERT
 #$new_cd->title('Fork');
 
-my $johns_rs = $schema->resultset('Artist')->search(
-    # Build your WHERE using an SQL::Abstract structure:
-    { name => "Alex" }
-  );
+#my $johns_rs = $schema->resultset('Artist')->search(
+#    # Build your WHERE using an SQL::Abstract structure:
+#    { name => "Alex" }
+#  );
 
-my @all_john_cds = $johns_rs->search_related('cds')->all;
+#my @all_john_cds = $johns_rs->search_related('cds')->all;
 
-for (@all_john_cds) {
-	print $_->title;
-}
+#for (@all_john_cds) {
+#	print $_->title;
+#}
   # Execute a joined query to get the cds.
 #  my @all_john_cds = $johns_rs->search_related('cds')->all;
 
@@ -64,13 +64,20 @@ for (@all_john_cds) {
 #	$count++;
 #}
 
-#$rs = $schema->resultset('CD');
-#
+#my $rs = $schema->resultset('User');
+#my $count = 1;
 #for ($rs->all)
 #{
-#	print $_->title . "\n";
-#}
+#	my $new_post = $schema->resultset('Post')->new({post_id => $count, title=>"Hui" . $_->nickname, views=>0, stars=>0});
+#	$new_post->author($_);
+#	$count++;
+#	$new_post->insert;
+#}#
 
+for ($schema->resultset('Post')->all)
+{
+	print $_->author->nickname . " " . $_->title . " \n";
+}
 #
 #my $ua = LWP::UserAgent->new();
 #
