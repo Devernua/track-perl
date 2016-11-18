@@ -183,7 +183,7 @@ sub GetCommenters {
 sub GetSelfCommenters {
 	my @result;
 	for ($schema->resultset('User')->all()) {
-		if ($_->comments->search_related('post', {'author.nickname' => $_->nickname}, {join => 'author'})->count()) {
+		if ($_->commented_posts->search_related('author', {'author.nickname' => $_->nickname})->count()) {
 			push (@result, {
 					nickname => $_->nickname,
 					karma => $_->karma,
@@ -193,5 +193,25 @@ sub GetSelfCommenters {
 	}
 	print Dumper(\@result);
 }
+
+sub GetDesertPosts {
+	my ($n) = @_;
+	my @result;
+	for ($schema->resultset('Post')->all()){
+		if ($_->commentors->count() < $n) {
+			push(@result, {});
+			$result[-1]->{author} = $_->author->nickname;
+			$result[-1]->{views} = $_->views;
+			$result[-1]->{stars} = $_->stars;
+			$result[-1]->{title} = $_->title;
+			$result[-1]->{fromDB} = "DA";
+			$result[-1]->{commentors} = [];
+			for ($_->commentors) {
+				push (@{$result[-1]->{commentors}}, $_->nickname);
+			}
+		}
+	}
+	print Dumper(\@result);
+}  
 
 1;
