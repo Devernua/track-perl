@@ -28,6 +28,8 @@ GetOptions(
 #my $schema = Local::Habr::Schema->connect("dbi:SQLite:dbname=test.db", "", "");
 #$schema->deploy; #for new db
 
+unless (defined $ARGV[0]) { exit() }
+
 if($ARGV[0] eq "user") {
 	if (defined $Local::Habr::CFG{"comhash"}{"name"}) {
 		Local::Habr::GetUserByName($Local::Habr::CFG{"comhash"}{"name"});
