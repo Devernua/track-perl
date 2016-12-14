@@ -4,6 +4,7 @@ use strict;
 #use warnings;
 use Local::Habr::Parser;
 use Local::Habr::Schema;
+use Local::Habr::Printer;
 
 use LWP::UserAgent;
 use Data::Dumper;
@@ -53,13 +54,16 @@ sub GetUserByName {
 			karma => $user->karma,
 			rating => $user->rating
 		};
-		print "From Database:\n";
-		print Dumper($result);
+		#print "From Database:\n";
+		#print Dumper($result);
+		Local::Habr::Printer->Print($result);
+
 	} else{
 		my $res = $agent->get("https://" . $CFG{site} . "/users/" . $name);
 		if ($res->is_success()) {
 			$user = $parser->get_user($res->content);
-			print Dumper($user);
+			#print Dumper($user);
+			Local::Habr::Printer->Print($user);
 			$schema->resultset('User')->create($user);
 		}
 	}	
@@ -74,8 +78,9 @@ sub GetUserByPost {
 			karma => $post->author->karma,
 			rating => $post->author->rating,
 		};
-		print "From Database:\n";
-		print Dumper($result);
+		#print "From Database:\n";
+		#print Dumper($result);
+		Local::Habr::Printer->Print($result);
 		#print "COMMENTPRS:";
 		#print Dumper($post->commentors);
 	} else {
@@ -85,7 +90,8 @@ sub GetUserByPost {
 		#print Dumper($post);
 		$res = $agent->get("https://" . $CFG{site} . "/users/" . $post->{author});
 		my $author = $parser->get_user($res->content);
-		print Dumper($author);
+		#print Dumper($author);
+		Local::Habr::Printer->Print($author);
 		#$author = $schema->resultset('User')->update_or_new($author);
 		my @commentors = @{$post->{commentors}};
 		for (@commentors) {
@@ -142,7 +148,8 @@ sub GetPost {
 			}
 		}
 	}	
-	print Dumper(\@result);
+	#print Dumper(\@result);
+	Local::Habr::Printer->Print(\@result);
 }
 
 sub GetCommenters {
@@ -150,7 +157,7 @@ sub GetCommenters {
 	my $result = [];	
 	my $post = $schema->resultset('Post')->find($post_id);
 	if (defined $post) {
-		print "FROM DB:\n";
+		#print "FROM DB:\n";
 		for ($post->commentors) {
 			push(@$result, {
 				nickname => $_->nickname,
@@ -177,7 +184,8 @@ sub GetCommenters {
 			$post->add_to_commentors($_);
 		}
 	}
-	print Dumper($result);		
+	#print Dumper($result);		
+	Local::Habr::Printer->Print($result);
 }
 	
 sub GetSelfCommenters {
@@ -191,7 +199,8 @@ sub GetSelfCommenters {
 			});
 		}
 	}
-	print Dumper(\@result);
+	#print Dumper(\@result);
+	Local::Habr::Printer->Print(\@result);
 }
 
 sub GetDesertPosts {
@@ -211,7 +220,8 @@ sub GetDesertPosts {
 			}
 		}
 	}
-	print Dumper(\@result);
+	Local::Habr::Printer->Print(\@result);
+	#print Dumper(\@result);
 }  
 
 1;
